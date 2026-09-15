@@ -220,12 +220,12 @@ id_ed25519  id_ed25519.pub  known_hosts</code></pre><button class="copy-btn">К�
         <div class="step-body"><p>Перейди в домашнюю папку: <span class="icmd"><code>cd ~</code><button class="copy-btn">⧉</button></span></p></div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
         <div class="step-body"><p>Склонируй репозиторий (адрес — кнопка <b>Clone</b> на странице проекта в GitLab, вкладка SSH):</p>
-          <div class="codeblock"><pre><code>git clone ssh://git@git-ssh.21-school.ru:2222/students_repo/твой_логин/D01T01.git</code></pre><button class="copy-btn">Копировать</button></div>
+          <div class="codeblock"><pre><code>git clone ssh://git@git-ssh.21-school.ru:2222/students_repo/твой_логин/D01T01_ID_1577481-1.git</code></pre><button class="copy-btn">Копировать</button></div>
           <details class="more">
             <summary><span class="plus">+</span> Пример: первый запуск спросит yes/no — это нормально</summary>
             <div class="more-body">
               <div class="codeblock"><pre><code>$ git clone ssh://git@git-ssh.21-school.ru:2222/...
-Cloning into 'D01T01'...
+Cloning into 'D01T01_ID_1577481-1'...
 The authenticity of host '[git-ssh.21-school.ru]:2222' can't be established.
 Are you sure you want to continue connecting (yes/no)? yes</code></pre><button class="copy-btn">Копировать</button></div>
               <p>Напечатай <span class="icmd"><code>yes</code></span> и Enter — сервер добавится в доверенные. Дальше скачивание пойдёт само.</p>
@@ -233,7 +233,18 @@ Are you sure you want to continue connecting (yes/no)? yes</code></pre><button c
           </details>
         </div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
-        <div class="step-body"><p>Войди в папку: <span class="icmd"><code>cd имя_папки</code><button class="copy-btn">⧉</button></span></p></div></li>
+        <div class="step-body"><p>Войди в папку репозитория, а затем в рабочую папку <span class="icmd"><code>src</code></span>:</p>
+          <div class="codeblock"><pre><code>cd D01T01_ID_1577481-1
+cd src</code></pre><button class="copy-btn">Копировать</button></div>
+          <details class="more">
+            <summary><span class="plus">+</span> Структура после клонирования</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>D01T01_ID_1577481-1/
+└── src/        ← вся работа здесь</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Почти все команды дальше выполняются внутри <span class="icmd"><code>src</code></span>. Проверить, где ты: <span class="icmd"><code>pwd</code></span> — путь должен заканчиваться на <span class="icmd"><code>D01T01_ID_1577481-1/src</code></span>.</p>
+            </div>
+          </details>
+        </div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
         <div class="step-body"><p>Создай ветку develop и перейди в неё: <span class="icmd"><code>git checkout -b develop</code><button class="copy-btn">⧉</button></span></p></div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
@@ -258,10 +269,10 @@ Are you sure you want to continue connecting (yes/no)? yes</code></pre><button c
   <article id="d1-q2" data-day="day1">
     <p class="kicker">День 1 · Квест 2</p>
     <div class="quest-top"><h2>Repo — запустить скрипт</h2><span class="counter"></span></div>
-    <p class="goal"><b>Цель:</b> запустить <span class="icmd"><code>src/ai_initial_module.sh</code></span>, который требует 5 модулей.</p>
+    <p class="goal"><b>Цель:</b> запустить <span class="icmd"><code>src/ai_initial_module/ai_initial_module.sh</code></span> (скрипт лежит в папке <span class="icmd"><code>src/ai_initial_module/</code></span>), который требует 5 модулей.</p>
     <ol class="steps">
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
-        <div class="step-body"><p>Посмотри файлы и права: <span class="icmd"><code>ls -l src/</code><button class="copy-btn">⧉</button></span></p>
+        <div class="step-body"><p>Посмотри файлы и права в папке модуля: <span class="icmd"><code>ls -l src/ai_initial_module/</code><button class="copy-btn">⧉</button></span></p>
           <details class="more">
             <summary><span class="plus">+</span> Пример: как читать права</summary>
             <div class="more-body">
@@ -276,9 +287,9 @@ Are you sure you want to continue connecting (yes/no)? yes</code></pre><button c
           </details>
         </div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
-        <div class="step-body"><p>Дай всем скриптам право на запуск: <span class="icmd"><code>chmod +x src/*.sh</code><button class="copy-btn">⧉</button></span></p></div></li>
+        <div class="step-body"><p>Дай скрипту право на запуск: <span class="icmd"><code>chmod +x src/ai_initial_module/ai_initial_module.sh</code><button class="copy-btn">⧉</button></span></p></div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
-        <div class="step-body"><p>Проверь: <span class="icmd"><code>ls -l src/</code><button class="copy-btn">⧉</button></span> — должно стать <span class="icmd"><code>-rwxrwx---</code></span>.</p>
+        <div class="step-body"><p>Проверь: <span class="icmd"><code>ls -l src/ai_initial_module/</code><button class="copy-btn">⧉</button></span> — должно стать <span class="icmd"><code>-rwxr-xr-x</code></span> (или хотя бы появилась буква <b>x</b>).</p>
           <details class="more">
             <summary><span class="plus">+</span> Пример: было → стало</summary>
             <div class="more-body">
@@ -288,7 +299,20 @@ Are you sure you want to continue connecting (yes/no)? yes</code></pre><button c
           </details>
         </div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
-        <div class="step-body"><p>Запусти: <span class="icmd"><code>./src/ai_initial_module.sh</code><button class="copy-btn">⧉</button></span></p></div></li>
+        <div class="step-body"><p>Проверь файл с данными: <span class="icmd"><code>cat src/ai_initial_module/important_data_for_ai_module_2.txt</code><button class="copy-btn">⧉</button></span> — в нём должны быть числа <b>1–5</b>, каждое на своей строке. Если данные повреждены — приведи файл к этому виду.</p>
+          <details class="more">
+            <summary><span class="plus">+</span> Как должно быть в файле</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>1
+2
+3
+4
+5</code></pre><button class="copy-btn">Копировать</button></div>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Запусти: <span class="icmd"><code>./src/ai_initial_module/ai_initial_module.sh</code><button class="copy-btn">⧉</button></span></p></div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
         <div class="step-body"><p>Читай, что он пишет, — скажет, чего не хватает.</p>
           <details class="more">
@@ -303,7 +327,7 @@ ERROR: file not found: src/ai_config/door.conf</code></pre><button class="copy-b
           </details>
         </div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
-        <div class="step-body"><p>Посмотри его код: <span class="icmd"><code>cat src/ai_initial_module.sh</code><button class="copy-btn">⧉</button></span> — поймёшь, что он ищет.</p></div></li>
+        <div class="step-body"><p>Посмотри его код: <span class="icmd"><code>cat src/ai_initial_module/ai_initial_module.sh</code><button class="copy-btn">⧉</button></span> — поймёшь, что он ищет.</p></div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
         <div class="step-body"><p>Исправь проблемы (создай нужное, дай права) и запускай снова — пока не заработает.</p>
           <div class="note danger">⛔ Сам скрипт менять нельзя — чиним только окружение: файлы, папки, права.</div>
@@ -334,14 +358,27 @@ git push origin develop</code></pre><button class="copy-btn">Копироват�
     <p class="goal"><b>Цель:</b> модуль управления дверьми не находит файлы — создать/переименовать нужные, вести журнал.</p>
     <ol class="steps">
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Вот такая структура папок должна получиться внутри <span class="icmd"><code>src/</code></span>:</p>
+          <div class="codeblock"><pre><code>door_management_files/
+├── door_configuration/   # door_1.conf … door_16.conf + door_21.conf = 17 конфигов
+├── door_logs/            # door_1.log … door_16.log = 16 логов
+└── door_map/             # door_map_1.1 = 1 карта</code></pre><button class="copy-btn">Копировать</button></div>
+          <p>Создать сразу все папки (ключ <b>-p</b> создаёт и родительские):</p>
+          <div class="codeblock"><pre><code>mkdir -p door_management_files/door_configuration
+mkdir -p door_management_files/door_logs
+mkdir -p door_management_files/door_map</code></pre><button class="copy-btn">Копировать</button></div>
+          <p>Проверка общего числа файлов: <span class="icmd"><code>find door_management_files -type f | wc -l</code><button class="copy-btn">⧉</button></span> — должно быть <b>34</b> (17 конфигов + 16 логов + 1 карта).</p>
+          <div class="note info">Сами скрипты модуля лежат в <span class="icmd"><code>src/</code></span>: <span class="icmd"><code>ai_door_management_module.sh</code></span> и <span class="icmd"><code>ai_door_control.sh</code></span>. Если не запускаются — <span class="icmd"><code>chmod +x ai_door_management_module.sh ai_door_control.sh</code></span>.</div>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
         <div class="step-body"><p>Запусти модуль: <span class="icmd"><code>./src/ai_door_management_module.sh</code><button class="copy-btn">⧉</button></span></p></div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
         <div class="step-body"><p>Он выдаст ошибку. <b>Запиши, что именно он просит.</b></p>
           <details class="more">
             <summary><span class="plus">+</span> Пример: ошибка называет путь</summary>
             <div class="more-body">
-              <div class="codeblock"><pre><code>ERROR: config directory not found: src/ai_door_data</code></pre><button class="copy-btn">Копировать</button></div>
-              <p>Он прямо называет путь — <span class="icmd"><code>src/ai_door_data</code></span>. Создай именно эту папку (шаг 5).</p>
+              <div class="codeblock"><pre><code>ERROR: config directory not found: src/door_management_files</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Он прямо называет путь — <span class="icmd"><code>src/door_management_files</code></span>. Создай именно эту папку и подпапки из шага 1.</p>
             </div>
           </details>
         </div></li>
@@ -350,7 +387,7 @@ git push origin develop</code></pre><button class="copy-btn">Копироват�
           <details class="more">
             <summary><span class="plus">+</span> Пример: что искать в коде</summary>
             <div class="more-body">
-              <div class="codeblock"><pre><code>CONFIG_DIR="src/ai_door_data"
+              <div class="codeblock"><pre><code>CONFIG_DIR="src/door_management_files/door_configuration"
 CONFIG_FILE="$CONFIG_DIR/door_1.conf"</code></pre><button class="copy-btn">Копировать</button></div>
               <p>Ищи слова <b>CONFIG, DIR, FILE, .conf</b> — там спрятаны нужные папка и имя файла.</p>
             </div>
@@ -359,7 +396,7 @@ CONFIG_FILE="$CONFIG_DIR/door_1.conf"</code></pre><button class="copy-btn">Ко�
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
         <div class="step-body"><p>Сравни с реальностью: <span class="icmd"><code>ls src/</code><button class="copy-btn">⧉</button></span></p></div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
-        <div class="step-body"><p>Создай недостающую папку: <span class="icmd"><code>mkdir имя_папки</code><button class="copy-btn">⧉</button></span></p></div></li>
+        <div class="step-body"><p>Создай недостающую папку (имена — шаг 1): <span class="icmd"><code>mkdir -p src/door_management_files/нужная_папка</code><button class="copy-btn">⧉</button></span>, например <span class="icmd"><code>mkdir -p src/door_management_files/door_logs</code></span>.</p></div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
         <div class="step-body"><p>Файл назван не так — переименуй: <span class="icmd"><code>mv старое_имя новое_имя</code><button class="copy-btn">⧉</button></span></p></div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
@@ -373,9 +410,11 @@ echo "mv старое_имя новое_имя" &gt;&gt; src/quest3.sh</code></p
             <summary><span class="plus">+</span> Пример: готовый журнал + разница &gt; и &gt;&gt;</summary>
             <div class="more-body">
               <p>Так выглядит заполненный <span class="icmd"><code>src/quest3.sh</code></span>:</p>
-              <div class="codeblock"><pre><code>mkdir src/ai_door_data
-mv src/door1.cfg src/ai_door_data/door_1.conf
-chmod +r src/ai_door_data/door_1.conf</code></pre><button class="copy-btn">Копировать</button></div>
+              <div class="codeblock"><pre><code>mkdir -p src/door_management_files/door_configuration
+mkdir -p src/door_management_files/door_logs
+mkdir -p src/door_management_files/door_map
+mv src/door1.cfg src/door_management_files/door_configuration/door_1.conf
+chmod +r src/door_management_files/door_configuration/door_1.conf</code></pre><button class="copy-btn">Копировать</button></div>
               <p>Каждая строка — твоя команда. Потом журнал можно запустить как скрипт и всё повторится.</p>
               <div class="codeblock"><pre><code>echo "hi" &gt; file.txt    # СТЕРЕТЬ всё, записать hi
 echo "hi" &gt;&gt; file.txt   # ДОПИСАТЬ hi в конец</code></pre><button class="copy-btn">Копировать</button></div>
@@ -461,21 +500,19 @@ git push origin develop</code></pre><button class="copy-btn">Копироват�
     <p class="goal"><b>Цель:</b> в конфиге двери поменять статус на <b>OPEN</b> и написать отчёт.</p>
     <ol class="steps">
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
-        <div class="step-body"><p>Найди папку с конфигами (из квеста 3): <span class="icmd"><code>ls src/имя_папки</code><button class="copy-btn">⧉</button></span></p></div></li>
+        <div class="step-body"><p>Папка с конфигами (из квеста 3): <span class="icmd"><code>ls src/door_management_files/door_configuration/</code><button class="copy-btn">⧉</button></span></p></div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
-        <div class="step-body"><p>Открой конфиг первой двери: <span class="icmd"><code>nano имя_файла</code><button class="copy-btn">⧉</button></span></p></div></li>
+        <div class="step-body"><p>Открой конфиг первой двери: <span class="icmd"><code>nano src/door_management_files/door_configuration/door_1.conf</code><button class="copy-btn">⧉</button></span></p></div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
         <div class="step-body"><p>Найди строку со словом <b>STATUS</b> и поменяй значение на <b>OPEN</b>.</p>
           <details class="more">
             <summary><span class="plus">+</span> Пример: было → стало</summary>
             <div class="more-body">
               <div class="codeblock"><pre><code># door_1.conf — БЫЛО:
-DOOR_ID=1
-STATUS=CLOSED
+STATUS: CLOSED
 
 # СТАЛО (меняешь только значение):
-DOOR_ID=1
-STATUS=OPEN</code></pre><button class="copy-btn">Копировать</button></div>
+STATUS: OPEN</code></pre><button class="copy-btn">Копировать</button></div>
               <p>Остальные строки не трогаешь.</p>
             </div>
           </details>
@@ -484,9 +521,9 @@ STATUS=OPEN</code></pre><button class="copy-btn">Копировать</button></
         <div class="step-body"><p>Сохрани: <kbd>Ctrl+O</kbd>, <kbd>Enter</kbd>. Выйди: <kbd>Ctrl+X</kbd>.</p></div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
         <div class="step-body"><p>Создай отчёт <span class="icmd"><code>nano src/quest5.txt</code><button class="copy-btn">⧉</button></span>, запиши шаги:</p>
-          <div class="codeblock"><pre><code>1. Запустила редактор nano: nano src/.../door_1.conf
-2. Нашла строку STATUS=CLOSED
-3. Изменила значение на OPEN
+          <div class="codeblock"><pre><code>1. Запустила редактор nano: nano src/door_management_files/door_configuration/door_1.conf
+2. Нашла строку STATUS: CLOSED
+3. Изменила значение на STATUS: OPEN
 4. Сохранила: Ctrl+O, Enter
 5. Вышла: Ctrl+X</code></pre><button class="copy-btn">Копировать</button></div></div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
@@ -511,14 +548,15 @@ git push origin develop</code></pre><button class="copy-btn">Копироват�
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
         <div class="step-body"><p>Запусти генератор: <span class="icmd"><code>./src/ai_help/keygen.sh</code><button class="copy-btn">⧉</button></span> — появится папка с кучей файлов.</p></div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
-        <div class="step-body"><p>Посмотри на них: <span class="icmd"><code>ls src/ai_help/</code><button class="copy-btn">⧉</button></span> (или ls в созданной папке).</p></div></li>
+        <div class="step-body"><p>Посмотри на них: <span class="icmd"><code>ls src/ai_help/</code><button class="copy-btn">⧉</button></span> (или ls в созданной папке).</p>
+          <p>Посчитай ключи: <span class="icmd"><code>find src/ai_help -name "*.key" | wc -l</code><button class="copy-btn">⧉</button></span> — в нашем варианте получилось <b>60</b>. Лишние файлы (не <span class="icmd"><code>.key</code></span>) удали — см. шаг ниже.</p></div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
         <div class="step-body"><p><b>Прочитай скрипт сборки:</b> <span class="icmd"><code>cat src/ai_help/unifier.sh</code><button class="copy-btn">⧉</button></span> — узнай расширение (например <span class="icmd"><code>.key</code></span>) и содержимое, которое он ждёт.</p>
           <details class="more">
             <summary><span class="plus">+</span> Пример: как понять unifier.sh</summary>
             <div class="more-body">
-              <div class="codeblock"><pre><code>cat fragments/*.key &gt; main.key</code></pre><button class="copy-btn">Копировать</button></div>
-              <p>Расшифровка: «склей все файлы <span class="icmd"><code>.key</code></span> из папки fragments в main.key». Значит, всё остальное — мусор под удаление.</p>
+              <div class="codeblock"><pre><code>cat ./*.key &gt; main.key</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Расшифровка: «склей все файлы <span class="icmd"><code>.key</code></span> из папки <span class="icmd"><code>ai_help</code></span> в main.key». Значит, всё остальное — мусор под удаление.</p>
             </div>
           </details>
         </div></li>
@@ -543,23 +581,26 @@ error_log_2024.txt, tmp_xxx, README</code></pre><button class="copy-btn">Коп�
             <summary><span class="plus">+</span> Пример: безопасное удаление + разбор команды</summary>
             <div class="more-body">
               <div class="codeblock"><pre><code># 1. СМОТРИМ, что попадёт под удаление:
-find src/ai_help/fragments -type f ! -name "*.key"
+find src/ai_help -type f ! -name "*.key"
 
 # 2. Всё верно? Тогда удаляем:
-find src/ai_help/fragments -type f ! -name "*.key" -delete</code></pre><button class="copy-btn">Копировать</button></div>
+find src/ai_help -type f ! -name "*.key" -delete</code></pre><button class="copy-btn">Копировать</button></div>
               <p><span class="icmd"><code>-type f</code></span> = только файлы, <span class="icmd"><code>! -name "*.key"</code></span> = «НЕ с именем .key». Итого: «удали всё, кроме .key».</p>
             </div>
           </details>
         </div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
-        <div class="step-body"><p>Собери ключ: <span class="icmd"><code>./src/ai_help/unifier.sh</code><button class="copy-btn">⧉</button></span> — появится <b>main.key</b>.</p></div></li>
+        <div class="step-body"><p>Собери ключ: <span class="icmd"><code>./src/ai_help/unifier.sh</code><button class="copy-btn">⧉</button></span> — при успехе он печатает <span class="icmd"><code>Ok.</code></span> и создаёт <b>main.key</b> в папке <span class="icmd"><code>src/ai_help/</code></span>.</p></div></li>
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
-        <div class="step-body"><p>Проверь, что <b>main.key</b> и папка с фрагментами лежат в <span class="icmd"><code>src/ai_help/</code></span>.</p>
+        <div class="step-body"><p>Проверь результат: <span class="icmd"><code>cat src/ai_help/main.key</code><button class="copy-btn">⧉</button></span> — внутри число (в нашем варианте получилось <b>694</b>; у тебя может быть своё — главное, что <b>main.key</b> собран твоим unifier.sh).</p>
           <details class="more">
             <summary><span class="plus">+</span> Пример: правильная проверка</summary>
             <div class="more-body">
               <div class="codeblock"><pre><code>$ ls src/ai_help/
-fragments/  keygen.sh  unifier.sh  main.key</code></pre><button class="copy-btn">Копировать</button></div>
+keygen.sh  unifier.sh  main.key  (+ файлы .key)
+
+$ cat src/ai_help/main.key
+694</code></pre><button class="copy-btn">Копировать</button></div>
             </div>
           </details>
         </div></li>
@@ -604,6 +645,33 @@ $ git commit -m "add hello"</code></pre><button class="copy-btn">Копиров�
       <li><label class="check"><input type="checkbox"></label><span class="num"></span>
         <div class="step-body"><p>Итог запушь: <span class="icmd"><code>git push origin develop</code><button class="copy-btn">⧉</button></span></p></div></li>
     </ol>
+    <details class="more">
+      <summary><span class="plus">+</span> Свериться: точные ветки, файлы и порядок слияний</summary>
+      <div class="more-body">
+        <p>Должны существовать ветки: <span class="icmd"><code>develop</code></span>, <span class="icmd"><code>key-branch</code></span>, <span class="icmd"><code>feature/3-key</code></span>, <span class="icmd"><code>release/1.0</code></span> (и <span class="icmd"><code>master</code></span>). Ключи лежат в папке <span class="icmd"><code>src/ai_help/</code></span>.</p>
+        <div class="codeblock"><pre><code>git checkout develop
+git checkout -b key-branch
+cp ai_help/main.key ai_help/main-2.key
+git add ai_help/main-2.key
+git commit -m "key-branch: add main-2.key"
+
+git checkout -b feature/3-key
+cp ai_help/main.key ai_help/main-3.key
+git add ai_help/main-3.key
+git commit -m "feature/3-key: add main-3.key"
+
+git checkout key-branch
+git merge feature/3-key        # Fast-forward — это нормально
+
+git checkout develop
+git checkout -b release/1.0
+git checkout develop
+git merge key-branch           # Fast-forward
+git checkout release/1.0
+git merge develop</code></pre><button class="copy-btn">Копировать</button></div>
+        <p>Имя ветки стоит <b>в начале сообщения коммита</b>: <span class="icmd"><code>key-branch: ...</code></span> и <span class="icmd"><code>feature/3-key: ...</code></span>. В конце нужно оказаться на <span class="icmd"><code>release/1.0</code></span> с чистым деревом, проверить: <span class="icmd"><code>git log --oneline --graph --all --decorate -10</code></span>.</p>
+      </div>
+    </details>
     <details class="more">
       <summary><span class="plus">+</span> Почему так: что такое ветка</summary>
       <div class="more-body"><p>Ветка — «параллельная версия» проекта. Работаешь в ней — основную не трогаешь. Так люди (или ты в разных задачах) не мешают друг другу.</p></div>
