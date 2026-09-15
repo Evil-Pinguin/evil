@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Шпаргалка D01 · D02 — пошаговый мануал</title>
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#f4f4f4;color:#222;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.6}
+  code{font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:.9em}
+  kbd{background:#222;color:#fff;border-radius:5px;padding:1px 7px;font-size:12.5px;
+    font-family:ui-monospace,Consolas,monospace;white-space:nowrap}
+
+  /* шапка — простая */
+  header{background:#fff;border-bottom:1px solid #ddd;padding:22px 14px 16px}
+  .wrap{max-width:860px;margin:0 auto}
+  header h1{margin:0;font-size:24px}
+  header p{margin:4px 0 12px;color:#666;font-size:15px}
+  .controls{display:flex;flex-wrap:wrap;gap:8px}
+  .search{flex:1;min-width:180px;display:flex;gap:6px;align-items:center;
+    border:1px solid #ccc;border-radius:8px;padding:7px 10px;background:#fff}
+  .search input{border:0;outline:0;font-size:14px;width:100%}
+  .tabs{display:flex;gap:6px}
+  .tabs button{border:1px solid #ccc;background:#fff;border-radius:8px;
+    padding:7px 14px;font-size:14px;cursor:pointer}
+  .tabs button.on{background:#222;color:#fff;border-color:#222}
+
+  main{max-width:860px;margin:0 auto;padding:14px 12px 90px}
+  article{background:#fff;border:1px solid #ddd;border-radius:10px;
+    padding:18px;margin:0 0 14px;scroll-margin-top:12px}
+  article.hidden{display:none}
+  .kicker{margin:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#888}
+  h2{margin:2px 0 4px;font-size:20px}
+  .quest-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .quest-top h2{flex:1;min-width:200px}
+  .counter{font-size:13px;color:#888;white-space:nowrap}
+  .counter.done{color:#15803d;font-weight:700}
+  .goal{margin:8px 0 4px}
+  h3{margin:18px 0 6px;font-size:16px}
+
+  /* содержание */
+  .toc{display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;margin-top:8px}
+  .toc a{color:#1a56db;text-decoration:none;font-size:15px;padding:3px 0}
+  .toc a:hover{text-decoration:underline}
+  @media(max-width:600px){.toc{grid-template-columns:1fr}}
+
+  /* шаги — простые */
+  ol.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+  ol.steps>li{display:flex;gap:10px;padding:11px 2px;border-top:1px solid #eee;counter-increment:s}
+  ol.steps>li:first-child{border-top:0}
+  .num{flex:none;font-weight:700;color:#999;min-width:22px;text-align:right}
+  .num::before{content:counter(s) "."}
+  li.done .num{color:#15803d}
+  .check{flex:none;cursor:pointer;margin-top:3px}
+  .check input{width:18px;height:18px;accent-color:#15803d;cursor:pointer;margin:0}
+  .step-body{flex:1;min-width:0}
+  .step-body p{margin:0 0 6px}
+  .step-body p:last-child{margin-bottom:0}
+
+  /* команды */
+  .icmd{display:inline-flex;align-items:center;gap:4px;background:#f1f1f1;border:1px solid #e2e2e2;
+    border-radius:6px;padding:0 3px 0 7px;margin:1px 0;max-width:100%}
+  .icmd code{white-space:pre-wrap;word-break:break-word}
+  .codeblock{position:relative;background:#1c1c1c;color:#f2f2f2;border-radius:8px;margin:8px 0;overflow:hidden}
+  .codeblock pre{margin:0;padding:12px;overflow-x:auto;font-size:13.5px}
+  .codeblock code{white-space:pre}
+  .copy-btn{border:0;cursor:pointer;border-radius:6px;background:#ddd;color:#222;font-size:12px;padding:2px 8px}
+  .copy-btn:hover{background:#ccc}
+  .codeblock .copy-btn{position:absolute;top:7px;right:7px;background:rgba(255,255,255,.16);color:#fff}
+  .copy-btn.ok{background:#15803d!important;color:#fff!important}
+
+  /* заметки */
+  .note{border-radius:8px;padding:9px 12px;margin:8px 0;border-left:4px solid;font-size:14.5px;background:#fafafa}
+  .note.warn{border-color:#eab308}
+  .note.danger{border-color:#ef4444}
+  .note.info{border-color:#3b82f6}
+  .note.ok{border-color:#22c55e}
+
+  /* раскрывашка «+ пример» */
+  details.more{border:1px dashed #bbb;border-radius:8px;margin:8px 0;background:#fcfcfc}
+  details.more>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:9px;
+    padding:9px 12px;font-size:14.5px;color:#333;user-select:none}
+  details.more>summary::-webkit-details-marker{display:none}
+  details.more>summary:hover{background:#f3f3f3;border-radius:8px}
+  details.more[open]>summary{border-bottom:1px dashed #ddd;border-radius:8px 8px 0 0}
+  .plus{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid #666;color:#333;
+    display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;
+    line-height:1;transition:transform .15s}
+  details.more[open] .plus{transform:rotate(45deg)}
+  .more-body{padding:10px 12px 12px;font-size:14.5px}
+  .more-body p{margin:0 0 6px}
+  .more-body .codeblock pre{font-size:13px}
+
+  /* таблицы */
+  table.t{width:100%;border-collapse:collapse;margin:8px 0;font-size:14px}
+  table.t th,table.t td{border:1px solid #e2e2e2;padding:6px 9px;text-align:left;vertical-align:top}
+  table.t th{background:#f6f6f6}
+  table.t td code{background:#f1f1f1;border-radius:4px;padding:0 5px}
+
+  footer{text-align:center;color:#888;font-size:13px;padding:8px}
+
+  /* прогресс */
+  .dock{position:fixed;right:12px;bottom:12px;display:flex;gap:6px;align-items:center;z-index:50}
+  .pill{background:#fff;border:1px solid #ccc;border-radius:999px;padding:8px 14px;
+    font-size:13px;display:flex;gap:8px;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+  .pill .bar{width:80px;height:7px;background:#e5e5e5;border-radius:99px;overflow:hidden}
+  .pill .bar i{display:block;height:100%;width:0;background:#15803d;transition:width .3s}
+  .dock button{border:1px solid #ccc;background:#fff;border-radius:999px;padding:8px 14px;
+    font-size:13px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+  .dock button:hover{background:#f1f1f1}
+  .empty{display:none;text-align:center;padding:26px;color:#888;background:#fff;
+    border:1px dashed #ccc;border-radius:10px}
+
+  @media print{
+    header .controls,.dock,.check,.copy-btn,.plus{display:none!important}
+    body{background:#fff}
+    article{break-inside:avoid}
+    details.more{border:1px solid #ccc}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Шпаргалка D01 · D02</h1>
+    <p>Делай задание, глядя на сайт: иди по шагам, жми <b>+</b>, чтобы раскрыть пример.</p>
+    <div class="controls">
+      <div class="search">🔍 <input id="search" type="text" placeholder="Найти: kill, gcc, nano…"></div>
+      <div class="tabs">
+        <button data-day="all" class="on">Всё</button>
+        <button data-day="day1">День 1</button>
+        <button data-day="day2">День 2</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <article id="toc" data-day="all">
+    <p class="kicker">Навигация</p>
+    <div class="quest-top"><h2>Содержание</h2></div>
+    <div class="toc">
+      <a href="#d1-prep">День 1 · Подготовка (SSH)</a>
+      <a href="#d2-prep">День 2 · Подготовка и правила</a>
+      <a href="#d1-q1">День 1 · Квест 1 — Clone</a>
+      <a href="#d2-q1">День 2 · Квест 1 — hello.c</a>
+      <a href="#d1-q2">День 1 · Квест 2 — Repo</a>
+      <a href="#d2-q2">День 2 · Квест 2 — named_hello.c</a>
+      <a href="#d1-q3">День 1 · Квест 3 — Dirs &amp; Files</a>
+      <a href="#d2-q3">День 2 · Квест 3 — arithmetic.c</a>
+      <a href="#d1-q4">День 1 · Квест 4 — Kill him</a>
+      <a href="#d2-q4">День 2 · Квест 4 — max.c</a>
+      <a href="#d1-q5">День 1 · Квест 5 — Conf</a>
+      <a href="#d2-q5">День 2 · Квест 5 — important_function.c</a>
+      <a href="#d1-q6">День 1 · Квест 6 — Rm</a>
+      <a href="#d2-q6">День 2 · Квест 6 — float_compare.c</a>
+      <a href="#d1-q7">День 1 · Квест 7 — Branches</a>
+      <a href="#d2-q7">День 2 · Квест 7 — crack.c</a>
+      <a href="#ref">Справочник команд</a>
+      <a href="#d2-final">День 2 · Финальная проверка</a>
+    </div>
+    <details class="more">
+      <summary><span class="plus">+</span> Как пользоваться сайтом</summary>
+      <div class="more-body">
+        <p><b>1.</b> Иди по шагам сверху вниз, ничего не пропускай.</p>
+        <p><b>2.</b> Жми <b>+</b> — там примеры выводов, разборы и доп. инфа.</p>
+        <p><b>3.</b> Копируй команды кнопкой «Копировать» или ⧉.</p>
+        <p><b>4.</b> Ставь галочки — прогресс сохраняется в браузере.</p>
+      </div>
+    </details>
+  </article>
+
+  <!-- ==================== ДЕНЬ 1 ==================== -->
+
+  <article id="d1-prep" data-day="day1">
+    <p class="kicker">День 1 · Подготовка</p>
+    <div class="quest-top"><h2>Подключить компьютер к GitLab</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> создать SSH-ключ и добавить его в GitLab.</p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Открой терминал.</p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Проверь, есть ли уже ключ: <span class="icmd"><code>ls ~/.ssh</code><button class="copy-btn">⧉</button></span> — если видишь <span class="icmd"><code>id_ed25519</code></span>, шаг 3 пропускай.</p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: как понять вывод</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>$ ls ~/.ssh
+id_ed25519  id_ed25519.pub  known_hosts</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Видишь <span class="icmd"><code>id_ed25519</code></span> — ключ уже есть, иди к шагу 4. Папки нет или пусто — делай шаг 3.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Создай ключ, на все вопросы жми <kbd>Enter</kbd>: <span class="icmd"><code>ssh-keygen -t ed25519</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Покажи ключ и скопируй <b>всю строку целиком</b>: <span class="icmd"><code>cat ~/.ssh/id_ed25519.pub</code><button class="copy-btn">⧉</button></span></p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: как выглядит ключ</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm1bidsMPky3Z user@pc</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Одна длинная строка от <span class="icmd"><code>ssh-ed25519</code></span> до конца. Копируй её полностью, без пробелов по краям.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>В браузере: GitLab → аватарка → <b>Preferences → SSH Keys → Add new key</b> → вставь → <b>Add key</b>.</p></div></li>
+    </ol>
+  </article>
+
+  <article id="d1-q1" data-day="day1">
+    <p class="kicker">День 1 · Квест 1</p>
+    <div class="quest-top"><h2>Clone — скачать репозиторий</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> получить копию репозитория и создать ветку develop.</p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Перейди в домашнюю папку: <span class="icmd"><code>cd ~</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Склонируй репозиторий (адрес — кнопка <b>Clone</b> на странице проекта в GitLab, вкладка SSH):</p>
+          <div class="codeblock"><pre><code>git clone ssh://git@git-ssh.21-school.ru:2222/students_repo/твой_логин/D01T01.git</code></pre><button class="copy-btn">Копировать</button></div>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: первый запуск спросит yes/no — это нормально</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>$ git clone ssh://git@git-ssh.21-school.ru:2222/...
+Cloning into 'D01T01'...
+The authenticity of host '[git-ssh.21-school.ru]:2222' can't be established.
+Are you sure you want to continue connecting (yes/no)? yes</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Напечатай <span class="icmd"><code>yes</code></span> и Enter — сервер добавится в доверенные. Дальше скачивание пойдёт само.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Войди в папку: <span class="icmd"><code>cd имя_папки</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Создай ветку develop и перейди в неё: <span class="icmd"><code>git checkout -b develop</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Проверь: <span class="icmd"><code>git branch</code><button class="copy-btn">⧉</button></span> — звёздочка должна быть у develop.</p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: правильный вывод</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>$ git branch
+* develop
+  master</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Звёздочка <span class="icmd"><code>*</code></span> = «ты сейчас здесь». Она у develop — всё верно.</p>
+            </div>
+          </details>
+        </div></li>
+    </ol>
+    <details class="more">
+      <summary><span class="plus">+</span> Почему так: зачем ветка develop</summary>
+      <div class="more-body"><p>В <b>master</b> лежит чистая версия, вся работа — в <b>develop</b>. Сломаешь что-то — master не пострадает.</p></div>
+    </details>
+  </article>
+
+  <article id="d1-q2" data-day="day1">
+    <p class="kicker">День 1 · Квест 2</p>
+    <div class="quest-top"><h2>Repo — запустить скрипт</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> запустить <span class="icmd"><code>src/ai_initial_module.sh</code></span>, который требует 5 модулей.</p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Посмотри файлы и права: <span class="icmd"><code>ls -l src/</code><button class="copy-btn">⧉</button></span></p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: как читать права</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>-rw-rw---- 1 user user 1234 ... ai_initial_module.sh
+ ▲  ▲   ▲   ▲
+ │  │   │   └─ остальные: --- (ничего нельзя)
+ │  │   └─ группа: rw- (читать, писать)
+ │  └─ владелец: rw- (читать, писать)
+ └─ тип: - (обычный файл)</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Буквы <b>x</b> нигде нет — запускать запрещено. Поэтому скрипт не стартует.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Дай всем скриптам право на запуск: <span class="icmd"><code>chmod +x src/*.sh</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Проверь: <span class="icmd"><code>ls -l src/</code><button class="copy-btn">⧉</button></span> — должно стать <span class="icmd"><code>-rwxrwx---</code></span>.</p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: было → стало</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>было:  -rw-rw----   (x нет — не запускается)
+стало: -rwxrwx---   (x есть — запускается)</code></pre><button class="copy-btn">Копировать</button></div>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Запусти: <span class="icmd"><code>./src/ai_initial_module.sh</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Читай, что он пишет, — скажет, чего не хватает.</p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: как выглядит жалоба скрипта</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>[1/5] door module... OK
+[2/5] control module... OK
+[3/5] config module... FAIL
+ERROR: file not found: src/ai_config/door.conf</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Читай буквально: он говорит, <b>какого файла нет</b> и <b>где его ждёт</b>. Создай именно это.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Посмотри его код: <span class="icmd"><code>cat src/ai_initial_module.sh</code><button class="copy-btn">⧉</button></span> — поймёшь, что он ищет.</p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Исправь проблемы (создай нужное, дай права) и запускай снова — пока не заработает.</p>
+          <div class="note danger">⛔ Сам скрипт менять нельзя — чиним только окружение: файлы, папки, права.</div>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: вывод рабочего скрипта</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>[1/5] door module... OK
+[2/5] control module... OK
+[3/5] config module... OK
+[4/5] key module... OK
+[5/5] log module... OK
+ALL MODULES OK</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Добивайся такого вывода. Только потом — коммит.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Зафиксируй:</p>
+          <div class="codeblock"><pre><code>git add .
+git commit -m "Quest 2: fix modules"
+git push origin develop</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+    </ol>
+  </article>
+
+  <article id="d1-q3" data-day="day1">
+    <p class="kicker">День 1 · Квест 3</p>
+    <div class="quest-top"><h2>Dirs &amp; Files — починить конфигурацию</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> модуль управления дверьми не находит файлы — создать/переименовать нужные, вести журнал.</p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Запусти модуль: <span class="icmd"><code>./src/ai_door_management_module.sh</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Он выдаст ошибку. <b>Запиши, что именно он просит.</b></p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: ошибка называет путь</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>ERROR: config directory not found: src/ai_door_data</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Он прямо называет путь — <span class="icmd"><code>src/ai_door_data</code></span>. Создай именно эту папку (шаг 5).</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Прочитай код: <span class="icmd"><code>cat src/ai_door_management_module.sh</code><button class="copy-btn">⧉</button></span> — найди, где и какие имена он ищет.</p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: что искать в коде</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>CONFIG_DIR="src/ai_door_data"
+CONFIG_FILE="$CONFIG_DIR/door_1.conf"</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Ищи слова <b>CONFIG, DIR, FILE, .conf</b> — там спрятаны нужные папка и имя файла.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Сравни с реальностью: <span class="icmd"><code>ls src/</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Создай недостающую папку: <span class="icmd"><code>mkdir имя_папки</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Файл назван не так — переименуй: <span class="icmd"><code>mv старое_имя новое_имя</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Файл есть, но не читается — дай право: <span class="icmd"><code>chmod +r имя_файла</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p><b>Каждую команду сразу пиши в журнал:</b></p>
+          <div class="codeblock"><pre><code>echo "mkdir имя_папки" &gt;&gt; src/quest3.sh
+echo "mv старое_имя новое_имя" &gt;&gt; src/quest3.sh</code></pre><button class="copy-btn">Копировать</button></div>
+          <div class="note warn">Только <b>две стрелки</b> <span class="icmd"><code>&gt;&gt;</code></span> (дописать). Одна <span class="icmd"><code>&gt;</code></span> сотрёт файл!</div>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: готовый журнал + разница &gt; и &gt;&gt;</summary>
+            <div class="more-body">
+              <p>Так выглядит заполненный <span class="icmd"><code>src/quest3.sh</code></span>:</p>
+              <div class="codeblock"><pre><code>mkdir src/ai_door_data
+mv src/door1.cfg src/ai_door_data/door_1.conf
+chmod +r src/ai_door_data/door_1.conf</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Каждая строка — твоя команда. Потом журнал можно запустить как скрипт и всё повторится.</p>
+              <div class="codeblock"><pre><code>echo "hi" &gt; file.txt    # СТЕРЕТЬ всё, записать hi
+echo "hi" &gt;&gt; file.txt   # ДОПИСАТЬ hi в конец</code></pre><button class="copy-btn">Копировать</button></div>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Запускай модуль снова, читай следующую ошибку, исправляй — пока не заработает.</p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Зафиксируй:</p>
+          <div class="codeblock"><pre><code>git add .
+git commit -m "Quest 3: fix door config"
+git push origin develop</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+    </ol>
+  </article>
+
+  <article id="d1-q4" data-day="day1">
+    <p class="kicker">День 1 · Квест 4</p>
+    <div class="quest-top"><h2>Kill him — остановить процесс</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> <span class="icmd"><code>ai_door_control.sh</code></span> крутится бесконечно — найти и остановить.</p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Найди процесс: <span class="icmd"><code>ps aux | grep ai_door_control</code><button class="copy-btn">⧉</button></span></p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: что значит команда по частям</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>ps aux  |  grep ai_door_control
+   ▲     ▲     ▲
+   │     │     └─ оставить строки с этим словом
+   │     └─ передать список дальше
+   └─ показать ВСЕ процессы</code></pre><button class="copy-btn">Копировать</button></div>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Вторая колонка найденной строки — <b>PID</b>. Запиши число.</p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: где PID и какую строку игнорировать</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>$ ps aux | grep ai_door_control
+user  12345  0.0 ...  ./src/ai_door_control.sh   ← ОН, PID = 12345
+user  12399  0.0 ...  grep ai_door_control       ← игнорируй, это твой поиск</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Строка с <span class="icmd"><code>grep</code></span> — это твоя же команда поиска, её не трогаем.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Останови: <span class="icmd"><code>kill номер_PID</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Проверь: <span class="icmd"><code>ps aux | grep ai_door_control</code><button class="copy-btn">⧉</button></span> — строки с процессом нет.</p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: убит / не убит</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code># УБИТ — остался только grep:
+user  12410 ... grep ai_door_control
+
+# НЕ УБИТ — строка с .sh на месте, нужен kill -9:
+user  12345 ... ./src/ai_door_control.sh</code></pre><button class="copy-btn">Копировать</button></div>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Не умер — жёстче: <span class="icmd"><code>kill -9 номер_PID</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Запиши в журнал:</p>
+          <div class="codeblock"><pre><code>echo "ps aux | grep ai_door_control" &gt;&gt; src/quest4.sh
+echo "kill номер_PID" &gt;&gt; src/quest4.sh</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Зафиксируй:</p>
+          <div class="codeblock"><pre><code>git add .
+git commit -m "Quest 4: kill door control"
+git push origin develop</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+    </ol>
+    <details class="more">
+      <summary><span class="plus">+</span> Почему так: kill и kill -9</summary>
+      <div class="more-body"><p>У каждого процесса есть номер — <b>PID</b>. Обычный <b>kill</b> — вежливая просьба завершиться, <b>kill -9</b> — принудительное убийство без вопросов.</p></div>
+    </details>
+  </article>
+
+  <article id="d1-q5" data-day="day1">
+    <p class="kicker">День 1 · Квест 5</p>
+    <div class="quest-top"><h2>Conf — открыть дверь в конфиге</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> в конфиге двери поменять статус на <b>OPEN</b> и написать отчёт.</p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Найди папку с конфигами (из квеста 3): <span class="icmd"><code>ls src/имя_папки</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Открой конфиг первой двери: <span class="icmd"><code>nano имя_файла</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Найди строку со словом <b>STATUS</b> и поменяй значение на <b>OPEN</b>.</p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: было → стало</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code># door_1.conf — БЫЛО:
+DOOR_ID=1
+STATUS=CLOSED
+
+# СТАЛО (меняешь только значение):
+DOOR_ID=1
+STATUS=OPEN</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Остальные строки не трогаешь.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Сохрани: <kbd>Ctrl+O</kbd>, <kbd>Enter</kbd>. Выйди: <kbd>Ctrl+X</kbd>.</p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Создай отчёт <span class="icmd"><code>nano src/quest5.txt</code><button class="copy-btn">⧉</button></span>, запиши шаги:</p>
+          <div class="codeblock"><pre><code>1. Запустила редактор nano: nano src/.../door_1.conf
+2. Нашла строку STATUS=CLOSED
+3. Изменила значение на OPEN
+4. Сохранила: Ctrl+O, Enter
+5. Вышла: Ctrl+X</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Зафиксируй:</p>
+          <div class="codeblock"><pre><code>git add .
+git commit -m "Quest 5: open door config"
+git push origin develop</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+    </ol>
+    <details class="more">
+      <summary><span class="plus">+</span> Почему так: что такое конфиги</summary>
+      <div class="more-body"><p>Конфиги — файлы настроек, программа читает их при запуске. Поменял текст — поменялось поведение, код трогать не надо.</p></div>
+    </details>
+  </article>
+
+  <article id="d1-q6" data-day="day1">
+    <p class="kicker">День 1 · Квест 6</p>
+    <div class="quest-top"><h2>Rm — собрать ключ из файлов</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> оставить только фрагменты ключа и собрать их в <b>main.key</b>.</p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Дай права: <span class="icmd"><code>chmod +x src/ai_help/*.sh</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Запусти генератор: <span class="icmd"><code>./src/ai_help/keygen.sh</code><button class="copy-btn">⧉</button></span> — появится папка с кучей файлов.</p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Посмотри на них: <span class="icmd"><code>ls src/ai_help/</code><button class="copy-btn">⧉</button></span> (или ls в созданной папке).</p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p><b>Прочитай скрипт сборки:</b> <span class="icmd"><code>cat src/ai_help/unifier.sh</code><button class="copy-btn">⧉</button></span> — узнай расширение (например <span class="icmd"><code>.key</code></span>) и содержимое, которое он ждёт.</p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: как понять unifier.sh</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>cat fragments/*.key &gt; main.key</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Расшифровка: «склей все файлы <span class="icmd"><code>.key</code></span> из папки fragments в main.key». Значит, всё остальное — мусор под удаление.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Подсмотри содержимое: <span class="icmd"><code>head имя_файла</code><button class="copy-btn">⧉</button></span> — фрагменты ключа отличаются от мусора.</p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: ключ vs мусор</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code># фрагмент ключа — похож на случайный набор символов:
+a3f9c1d2e7b4a9c0d3f8e1b6a5c4
+
+# мусор — всякий хлам:
+error_log_2024.txt, tmp_xxx, README</code></pre><button class="copy-btn">Копировать</button></div>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Удали мусор: по одному <span class="icmd"><code>rm имя_файла</code><button class="copy-btn">⧉</button></span> или массово:</p>
+          <div class="codeblock"><pre><code>find путь_к_папке -type f ! -name "*.key" -delete</code></pre><button class="copy-btn">Копировать</button></div>
+          <div class="note warn">Сначала запусти <b>без</b> <span class="icmd"><code>-delete</code></span> — посмотри список. Потом с <span class="icmd"><code>-delete</code></span>. Расширение сверь с шагом 4!</div>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: безопасное удаление + разбор команды</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code># 1. СМОТРИМ, что попадёт под удаление:
+find src/ai_help/fragments -type f ! -name "*.key"
+
+# 2. Всё верно? Тогда удаляем:
+find src/ai_help/fragments -type f ! -name "*.key" -delete</code></pre><button class="copy-btn">Копировать</button></div>
+              <p><span class="icmd"><code>-type f</code></span> = только файлы, <span class="icmd"><code>! -name "*.key"</code></span> = «НЕ с именем .key». Итого: «удали всё, кроме .key».</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Собери ключ: <span class="icmd"><code>./src/ai_help/unifier.sh</code><button class="copy-btn">⧉</button></span> — появится <b>main.key</b>.</p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Проверь, что <b>main.key</b> и папка с фрагментами лежат в <span class="icmd"><code>src/ai_help/</code></span>.</p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: правильная проверка</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>$ ls src/ai_help/
+fragments/  keygen.sh  unifier.sh  main.key</code></pre><button class="copy-btn">Копировать</button></div>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Все команды запиши в журнал: <span class="icmd"><code>echo "команда" &gt;&gt; src/quest6.sh</code><button class="copy-btn">⧉</button></span> — каждую своей строкой.</p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Зафиксируй:</p>
+          <div class="codeblock"><pre><code>git add .
+git commit -m "Quest 6: build main.key"
+git push origin develop</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+    </ol>
+  </article>
+
+  <article id="d1-q7" data-day="day1">
+    <p class="kicker">День 1 · Квест 7</p>
+    <div class="quest-top"><h2>Branches — ветки по инструкции</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> выполнить инструкции из папки <span class="icmd"><code>src/git_for_human</code></span>.</p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Посмотри, что там: <span class="icmd"><code>ls src/git_for_human/</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Прочитай все файлы по очереди: <span class="icmd"><code>cat src/git_for_human/имя_файла</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Делай <b>ровно то, что написано</b>: ветки с указанными именами, файлы с указанным содержимым, коммить.</p>
+          <div class="codeblock"><pre><code>git branch имя        # создать ветку
+git checkout имя      # переключиться
+git checkout -b имя   # создать и сразу переключиться</code></pre><button class="copy-btn">Копировать</button></div>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: инструкция → действия</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code># файл task_1.txt говорит:
+# "создай ветку human/dev и файл hello.txt с текстом hi"
+
+$ git checkout -b human/dev
+$ echo "hi" &gt; hello.txt
+$ git add hello.txt
+$ git commit -m "add hello"</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Прочитала файл — буквально выполнила написанное — закоммитила. И так с каждым файлом.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Итог запушь: <span class="icmd"><code>git push origin develop</code><button class="copy-btn">⧉</button></span></p></div></li>
+    </ol>
+    <details class="more">
+      <summary><span class="plus">+</span> Почему так: что такое ветка</summary>
+      <div class="more-body"><p>Ветка — «параллельная версия» проекта. Работаешь в ней — основную не трогаешь. Так люди (или ты в разных задачах) не мешают друг другу.</p></div>
+    </details>
+  </article>
+
+  <!-- ==================== ДЕНЬ 2 ==================== -->
+
+  <article id="d2-prep" data-day="day2">
+    <p class="kicker">День 2 · Подготовка</p>
+    <div class="quest-top"><h2>Подготовка и общие правила</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> склонировать репозиторий дня 2 и запомнить правила.</p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Склонируй как в дне 1: <span class="icmd"><code>git clone адрес</code><button class="copy-btn">⧉</button></span>, потом <span class="icmd"><code>cd имя_папки</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Создай ветку: <span class="icmd"><code>git checkout -b develop</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Посмотри: <span class="icmd"><code>ls -l src/</code><button class="copy-btn">⧉</button></span> — там <span class="icmd"><code>arithmetic.c</code></span> (сломанный) и <span class="icmd"><code>float_compare.c</code></span> (квест 6). Остальное создаёшь сам в <span class="icmd"><code>src/</code></span>.</p></div></li>
+    </ol>
+    <div class="note warn"><b>Правила всех квестов дня 2:</b>
+      <br>• Компиляция: <span class="icmd"><code>gcc -Wall -Werror -Wextra -std=c11 src/имя.c -o имя</code><button class="copy-btn">⧉</button></span>
+      <br>• Есть <span class="icmd"><code>#include &lt;math.h&gt;</code></span> — добавь <span class="icmd"><code>-lm</code></span> в конец команды
+      <br>• Тест: <span class="icmd"><code>echo "ввод" | ./имя</code><button class="copy-btn">⧉</button></span>
+      <br>• Вывод <b>без \n</b> в конце, мусор во вводе → <b>n/a</b>
+      <br>• После тестов: <span class="icmd"><code>rm имя</code><button class="copy-btn">⧉</button></span>, коммить только <b>.c</b>
+    </div>
+    <details class="more">
+      <summary><span class="plus">+</span> Пример: полный цикл работы с программой</summary>
+      <div class="more-body">
+        <div class="codeblock"><pre><code>$ gcc -Wall -Werror -Wextra -std=c11 src/hello.c -o hello
+$ ./hello
+Hello, AI!
+$ rm hello
+$ git add src/hello.c
+$ git commit -m "Quest 1: hello"
+$ git push origin develop</code></pre><button class="copy-btn">Копировать</button></div>
+        <p>Скомпилировал → проверил → удалил бинарник → закоммитил исходник → запушил. Так каждый квест.</p>
+      </div>
+    </details>
+  </article>
+
+  <article id="d2-q1" data-day="day2">
+    <p class="kicker">День 2 · Квест 1</p>
+    <div class="quest-top"><h2>hello.c — первая программа</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> программа печатает <span class="icmd"><code>Hello, AI!</code></span></p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Создай файл: <span class="icmd"><code>nano src/hello.c</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Вставь код:</p>
+          <div class="codeblock"><pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+  printf("Hello, AI!");
+  return 0;
+}</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Сохрани: <kbd>Ctrl+O</kbd>, <kbd>Enter</kbd>, <kbd>Ctrl+X</kbd>.</p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Скомпилируй: <span class="icmd"><code>gcc -Wall -Werror -Wextra -std=c11 src/hello.c -o hello</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Запусти: <span class="icmd"><code>./hello</code><button class="copy-btn">⧉</button></span> — выведет <span class="icmd"><code>Hello, AI!</code></span></p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: правильный запуск</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>$ ./hello
+Hello, AI!$</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Знак <span class="icmd"><code>$</code></span> остался на той же строке — перевода строки нет. Так и должно быть.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Убери бинарник, закоммить, запушь:</p>
+          <div class="codeblock"><pre><code>rm hello
+git add src/hello.c
+git commit -m "Quest 1: hello"
+git push origin develop</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+    </ol>
+    <details class="more">
+      <summary><span class="plus">+</span> Разбор кода построчно</summary>
+      <div class="more-body">
+        <p><span class="icmd"><code>#include &lt;stdio.h&gt;</code></span> — подключить библиотеку, где живёт printf (печать).</p>
+        <p><span class="icmd"><code>int main(void)</code></span> — точка входа, отсюда стартует программа.</p>
+        <p><span class="icmd"><code>return 0</code></span> — «завершилась успешно». В printf нет <span class="icmd"><code>\n</code></span> — автотесты сверяют вывод посимвольно.</p>
+      </div>
+    </details>
+  </article>
+
+  <article id="d2-q2" data-day="day2">
+    <p class="kicker">День 2 · Квест 2</p>
+    <div class="quest-top"><h2>named_hello.c — ввод имени</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> прочитать целое число и поздороваться с ним.</p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Создай: <span class="icmd"><code>nano src/named_hello.c</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Код:</p>
+          <div class="codeblock"><pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+  int name;
+  char extra;
+
+  if (scanf("%d %c", &amp;name, &amp;extra) != 1) {
+    printf("n/a");
+    return 0;
+  }
+  printf("Hello, %d!", name);
+  return 0;
+}</code></pre><button class="copy-btn">Копировать</button></div>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: как ловушка %c ловит мусор</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>ввод "123"  → прочитал (123), extra пусто → вернул 1 → Hello, 123!
+ввод "abc"  → число не прочитал          → вернул 0 → n/a
+ввод "12x"  → прочитал 12, 'x' в extra   → вернул 2 → n/a</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>scanf возвращает, сколько штук прочитал. Нам нужно ровно 1 число — иначе это мусор.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Скомпилируй и проверь:</p>
+          <div class="codeblock"><pre><code>gcc -Wall -Werror -Wextra -std=c11 src/named_hello.c -o named_hello
+echo "123" | ./named_hello
+echo "abc" | ./named_hello</code></pre><button class="copy-btn">Копировать</button></div>
+          <table class="t"><tr><th>Ввод</th><th>Ожидаем</th></tr>
+            <tr><td><code>123</code></td><td><code>Hello, 123!</code></td></tr>
+            <tr><td><code>abc</code></td><td><code>n/a</code></td></tr>
+          </table></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Убери бинарник, закоммить, запушь:</p>
+          <div class="codeblock"><pre><code>rm named_hello
+git add src/named_hello.c
+git commit -m "Quest 2: named hello"
+git push origin develop</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+    </ol>
+    <details class="more">
+      <summary><span class="plus">+</span> Разбор: scanf, %d, &amp;</summary>
+      <div class="more-body">
+        <p><b>scanf</b> читает с клавиатуры. <span class="icmd"><code>%d</code></span> = целое число. <b>&amp;</b> перед переменной = «адрес ящика, куда положить».</p>
+        <p>Хитрость с <span class="icmd"><code>%c</code></span>: он читает символ даже после числа. Если там был мусор — scanf вернёт 2 вместо 1, и мы выведем n/a.</p>
+      </div>
+    </details>
+  </article>
+
+  <article id="d2-q3" data-day="day2">
+    <p class="kicker">День 2 · Квест 3</p>
+    <div class="quest-top"><h2>arithmetic.c — четыре действия</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> два числа на входе → сумма, разность, произведение, частное.</p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Открой заготовку: <span class="icmd"><code>nano src/arithmetic.c</code><button class="copy-btn">⧉</button></span> — она сломанная.</p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Вычисти всё (<kbd>Ctrl+K</kbd> вырезает строки) и вставь:</p>
+          <div class="codeblock"><pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+  int a;
+  int b;
+  char extra;
+
+  if (scanf("%d %d %c", &amp;a, &amp;b, &amp;extra) != 2) {
+    printf("n/a");
+    return 0;
+  }
+  printf("%d %d %d ", a + b, a - b, a * b);
+  if (b == 0) {
+    printf("n/a");
+  } else {
+    printf("%d", a / b);
+  }
+  return 0;
+}</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Скомпилируй: <span class="icmd"><code>gcc -Wall -Werror -Wextra -std=c11 src/arithmetic.c -o arithmetic</code><button class="copy-btn">⧉</button></span></p>
+          <p>Прогони <b>ВСЕ</b> тесты:</p>
+          <table class="t"><tr><th>Команда</th><th>Ожидаем</th></tr>
+            <tr><td><code>echo "8 2" | ./arithmetic</code></td><td><code>10 6 16 4</code></td></tr>
+            <tr><td><code>echo "1 0" | ./arithmetic</code></td><td><code>1 1 0 n/a</code></td></tr>
+            <tr><td><code>echo "3 2" | ./arithmetic</code></td><td><code>5 1 6 1</code></td></tr>
+            <tr><td><code>echo "abc" | ./arithmetic</code></td><td><code>n/a</code></td></tr>
+            <tr><td><code>echo "8 2.5" | ./arithmetic</code></td><td><code>n/a</code></td></tr>
+          </table>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: почему "8 2.5" — это n/a</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>ввод "8 2.5" → scanf читает: 8, 2, а точку '.' ловит %c
+→ вернул 3, а не 2 → n/a</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Без ловушки <span class="icmd"><code>%c</code></span> ввод <span class="icmd"><code>8 2.5</code></span> проскочил бы как нормальный «8 2». Автотест это проверяет!</p>
+            </div>
+          </details>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: целочисленное деление</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>3 / 2 = 1   (а не 1.5 — дробь отброшена)
+7 / 3 = 2
+1 / 0 → делить нельзя → печатаем n/a, но первые 3 числа выводим</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Для целых <span class="icmd"><code>/</code></span> отбрасывает дробную часть. Задание хочет именно так.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Убери бинарник, закоммить, запушь:</p>
+          <div class="codeblock"><pre><code>rm arithmetic
+git add src/arithmetic.c
+git commit -m "Quest 3: arithmetic"
+git push origin develop</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+    </ol>
+  </article>
+
+  <article id="d2-q4" data-day="day2">
+    <p class="kicker">День 2 · Квест 4</p>
+    <div class="quest-top"><h2>max.c — максимум из двух</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> вывести большее из двух чисел. Максимум — в отдельной функции.</p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Создай: <span class="icmd"><code>nano src/max.c</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Код:</p>
+          <div class="codeblock"><pre><code>#include &lt;stdio.h&gt;
+
+int max_of_two(int a, int b) {
+  return (a &gt; b) ? a : b;
+}
+
+int main(void) {
+  int a;
+  int b;
+  char extra;
+
+  if (scanf("%d %d %c", &amp;a, &amp;b, &amp;extra) != 2) {
+    printf("n/a");
+    return 0;
+  }
+  printf("%d", max_of_two(a, b));
+  return 0;
+}</code></pre><button class="copy-btn">Копировать</button></div>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: тернарный оператор = короткое if/else</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>return (a &gt; b) ? a : b;
+
+// то же самое длинно:
+if (a &gt; b)
+  return a;
+else
+  return b;</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Читается: «если a больше b — вернуть a, иначе b». Функция стоит выше main, т.к. компилятор читает сверху вниз.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Скомпилируй: <span class="icmd"><code>gcc -Wall -Werror -Wextra -std=c11 src/max.c -o max</code><button class="copy-btn">⧉</button></span></p>
+          <p>Тесты:</p>
+          <table class="t"><tr><th>Команда</th><th>Ожидаем</th></tr>
+            <tr><td><code>echo "3 2" | ./max</code></td><td><code>3</code></td></tr>
+            <tr><td><code>echo "12.3 10" | ./max</code></td><td><code>n/a</code></td></tr>
+            <tr><td><code>echo "5 5" | ./max</code></td><td><code>5</code></td></tr>
+            <tr><td><code>echo "-7 -2" | ./max</code></td><td><code>-2</code></td></tr>
+          </table>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: разбор каверзных тестов</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>"5 5"   → числа равны, вернётся b=5 → 5 (то же число)
+"-7 -2" → -2 больше, чем -7         → -2
+"12.3"  → точку ловит %c            → n/a</code></pre><button class="copy-btn">Копировать</button></div>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Убери бинарник, закоммить, запушь:</p>
+          <div class="codeblock"><pre><code>rm max
+git add src/max.c
+git commit -m "Quest 4: max"
+git push origin develop</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+    </ol>
+  </article>
+
+  <article id="d2-q5" data-day="day2">
+    <p class="kicker">День 2 · Квест 5</p>
+    <div class="quest-top"><h2>important_function.c — сложная формула</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> посчитать формулу с дробными числами.</p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Создай: <span class="icmd"><code>nano src/important_function.c</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Код:</p>
+          <div class="codeblock"><pre><code>#include &lt;math.h&gt;
+#include &lt;stdio.h&gt;
+
+int main(void) {
+  double x;
+  char extra;
+
+  if (scanf("%lf %c", &amp;x, &amp;extra) != 1) {
+    printf("n/a");
+    return 0;
+  }
+  if (x == 0) {
+    printf("n/a");
+    return 0;
+  }
+  double y = 7e-3 * pow(x, 4) +
+             ((22.8 * pow(x, 1.0 / 3.0) - 1e3) * x + 3) / (x * x / 2) -
+             x * pow(10 + x, 2.0 / x) - 1.01;
+  if (isnan(y) || isinf(y)) {
+    printf("n/a");
+    return 0;
+  }
+  printf("%.1f", y);
+  return 0;
+}</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Компилируй с <b>-lm</b> в конце (в коде есть math.h!):</p>
+          <div class="codeblock"><pre><code>gcc -Wall -Werror -Wextra -std=c11 src/important_function.c -o important_function -lm</code></pre><button class="copy-btn">Копировать</button></div>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: ошибка, если забыть -lm</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>/usr/bin/ld: undefined reference to `pow'
+/usr/bin/ld: undefined reference to `isnan'</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Видишь <span class="icmd"><code>undefined reference</code></span> — значит, забыл <span class="icmd"><code>-lm</code></span> в конце команды. Добавь и перекомпилируй.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Тесты:</p>
+          <table class="t"><tr><th>Команда</th><th>Ожидаем</th></tr>
+            <tr><td><code>echo "1" | ./important_function</code></td><td><code>-2070.4</code></td></tr>
+            <tr><td><code>echo "abc" | ./important_function</code></td><td><code>n/a</code></td></tr>
+            <tr><td><code>echo "0" | ./important_function</code></td><td><code>n/a</code></td></tr>
+          </table></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Убери бинарник, закоммить, запушь:</p>
+          <div class="codeblock"><pre><code>rm important_function
+git add src/important_function.c
+git commit -m "Quest 5: important function"
+git push origin develop</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+    </ol>
+    <details class="more">
+      <summary><span class="plus">+</span> Разбор: double, pow, 1.0/3.0, %.1f</summary>
+      <div class="more-body">
+        <p><b>double</b> — дробные числа. Читают как <span class="icmd"><code>%lf</code></span>, печатают как <span class="icmd"><code>%f</code></span> — правило языка.</p>
+        <div class="codeblock"><pre><code>1/3     = 0       (целое деление — ловушка!)
+1.0/3.0 = 0.3333  (правильно, с точками)</code></pre><button class="copy-btn">Копировать</button></div>
+        <p><span class="icmd"><code>pow(x, 4)</code></span> — степень. <span class="icmd"><code>x == 0</code></span> проверяем из-за деления <span class="icmd"><code>2/x</code></span>. <b>isnan/isinf</b> ловят «не-число» и бесконечность. <span class="icmd"><code>%.1f</code></span> — печать с 1 знаком после точки. Заголовки — по алфавиту (math.h выше stdio.h).</p>
+      </div>
+    </details>
+  </article>
+
+  <article id="d2-q6" data-day="day2">
+    <p class="kicker">День 2 · Квест 6</p>
+    <div class="quest-top"><h2>float_compare.c — эпсилон</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> файл уже есть — починить в нём сравнение с нулём.</p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Посмотри файл: <span class="icmd"><code>cat src/float_compare.c</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Найди <b>fun()</b> — она возвращает <span class="icmd"><code>(1.0/13) * (1/3)^20</code></span> ≈ 0.000000000022. Это <b>НЕ ноль!</b></p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: почему == не работает для дробей</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>double r = 0.1 + 0.2;
+printf("%d", r == 0.3);   // напечатает 0, то есть ЛОЖЬ!
+// потому что r = 0.30000000000000004, а не 0.3</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Дроби хранятся приближённо. Поэтому условие <span class="icmd"><code>res == 0</code></span> никогда не срабатывает и <span class="icmd"><code>OK!</code></span> не печатается.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Открой: <span class="icmd"><code>nano src/float_compare.c</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Меняй <b>ТОЛЬКО условие</b> (fun не трогать):</p>
+          <div class="codeblock"><pre><code>const double kEpsilon = 1e-6;
+
+if (fabs(res) &lt; kEpsilon)
+  printf("OK!");</code></pre><button class="copy-btn">Копировать</button></div>
+          <div class="note warn">Если нет <span class="icmd"><code>#include &lt;math.h&gt;</code></span> сверху — добавь (нужен для <span class="icmd"><code>fabs</code></span>).</div>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: было → стало + почему сработает</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>// БЫЛО — не работает:
+if (res == 0) printf("OK!");
+
+// СТАЛО — работает:
+const double kEpsilon = 1e-6;   // 0.000001
+if (fabs(res) &lt; kEpsilon) printf("OK!");
+
+// res = 0.000000000022, эпсилон = 0.000001
+// 0.000000000022 &lt; 0.000001 → правда → OK!</code></pre><button class="copy-btn">Копировать</button></div>
+              <p><b>fabs</b> — модуль (убирает минус). Идея: считаем «нулём» всё, что меньше допуска.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Скомпилируй с <b>-lm</b>: <span class="icmd"><code>gcc -Wall -Werror -Wextra -std=c11 src/float_compare.c -o float_compare -lm</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Запусти: <span class="icmd"><code>./float_compare</code><button class="copy-btn">⧉</button></span> — выведет <span class="icmd"><code>OK!</code></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Убери бинарник, закоммить, запушь:</p>
+          <div class="codeblock"><pre><code>rm float_compare
+git add src/float_compare.c
+git commit -m "Quest 6: epsilon compare"
+git push origin develop</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+    </ol>
+  </article>
+
+  <article id="d2-q7" data-day="day2">
+    <p class="kicker">День 2 · Квест 7</p>
+    <div class="quest-top"><h2>crack.c — взлом круглого замка</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> точка строго внутри окружности x² + y² = 25 → <b>GOTCHA</b>, иначе <b>MISS</b>.</p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Создай: <span class="icmd"><code>nano src/crack.c</code><button class="copy-btn">⧉</button></span></p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Код:</p>
+          <div class="codeblock"><pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+  double x;
+  double y;
+  char extra;
+
+  if (scanf("%lf %lf %c", &amp;x, &amp;y, &amp;extra) != 2) {
+    printf("n/a");
+    return 0;
+  }
+  if (x * x + y * y &lt; 25) {
+    printf("GOTCHA");
+  } else {
+    printf("MISS");
+  }
+  return 0;
+}</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Скомпилируй: <span class="icmd"><code>gcc -Wall -Werror -Wextra -std=c11 src/crack.c -o crack</code><button class="copy-btn">⧉</button></span></p>
+          <p>Тесты:</p>
+          <table class="t"><tr><th>Команда</th><th>Ожидаем</th></tr>
+            <tr><td><code>echo "1.5 1.5" | ./crack</code></td><td><code>GOTCHA</code></td></tr>
+            <tr><td><code>echo "3 4" | ./crack</code></td><td><code>MISS</code></td></tr>
+            <tr><td><code>echo "10 10" | ./crack</code></td><td><code>MISS</code></td></tr>
+            <tr><td><code>echo "abc" | ./crack</code></td><td><code>n/a</code></td></tr>
+          </table>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: математика каждого теста</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>(1.5, 1.5): 2.25 + 2.25 = 4.5  → 4.5 &lt; 25  → GOTCHA
+(3, 4):     9 + 16 = 25         → НЕ меньше  → MISS (точка НА окружности!)
+(10, 10):   100 + 100 = 200     → далеко     → MISS</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Окружность радиуса 5 с центром в нуле. Нужно <b>строго меньше</b> 25 — точка на самой линии не считается.</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p>Убери бинарник, закоммить, запушь:</p>
+          <div class="codeblock"><pre><code>rm crack
+git add src/crack.c
+git commit -m "Quest 7: crack"
+git push origin develop</code></pre><button class="copy-btn">Копировать</button></div></div></li>
+    </ol>
+  </article>
+
+  <article id="d2-final" data-day="day2">
+    <p class="kicker">День 2 · Финал</p>
+    <div class="quest-top"><h2>Финальная проверка</h2><span class="counter"></span></div>
+    <p class="goal"><b>Цель:</b> убедиться, что всё на месте и лишнего нет.</p>
+    <ol class="steps">
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p><span class="icmd"><code>ls src/</code><button class="copy-btn">⧉</button></span> — 7 файлов: hello.c, named_hello.c, arithmetic.c, max.c, important_function.c, float_compare.c, crack.c.</p></div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p><span class="icmd"><code>git status</code><button class="copy-btn">⧉</button></span> — working tree clean.</p>
+          <details class="more">
+            <summary><span class="plus">+</span> Пример: чистый статус</summary>
+            <div class="more-body">
+              <div class="codeblock"><pre><code>$ git status
+On branch develop
+nothing to commit, working tree clean</code></pre><button class="copy-btn">Копировать</button></div>
+              <p>Такой вывод = всё закоммичено, можно сдавать. 🎉</p>
+            </div>
+          </details>
+        </div></li>
+      <li><label class="check"><input type="checkbox"></label><span class="num"></span>
+        <div class="step-body"><p><span class="icmd"><code>ls</code><button class="copy-btn">⧉</button></span> в корне — нет бинарников, только исходники.</p></div></li>
+    </ol>
+  </article>
+
+  <!-- ==================== СПРАВОЧНИК ==================== -->
+
+  <article id="ref" data-day="all">
+    <p class="kicker">Справочник</p>
+    <div class="quest-top"><h2>Частые команды</h2></div>
+    <p class="goal">Всё нужное в одном месте — подсмотреть, не листая квесты.</p>
+
+    <h3>Nano (редактор)</h3>
+    <table class="t"><tr><th>Клавиши</th><th>Что делает</th></tr>
+      <tr><td><kbd>Ctrl+O</kbd>, <kbd>Enter</kbd></td><td>Сохранить файл</td></tr>
+      <tr><td><kbd>Ctrl+X</kbd></td><td>Выйти</td></tr>
+      <tr><td><kbd>Ctrl+K</kbd></td><td>Вырезать строку</td></tr>
+    </table>
+    <details class="more">
+      <summary><span class="plus">+</span> Пример: типичная сессия в nano</summary>
+      <div class="more-body">
+        <div class="codeblock"><pre><code>$ nano src/hello.c
+... правишь текст ...
+Ctrl+O → Enter — сохранить
+Ctrl+X — выйти</code></pre><button class="copy-btn">Копировать</button></div>
+      </div>
+    </details>
+
+    <h3>Linux</h3>
+    <table class="t"><tr><th>Команда</th><th>Что делает</th></tr>
+      <tr><td><code>ls -l src/</code></td><td>Файлы и их права</td></tr>
+      <tr><td><code>cd папка</code></td><td>Перейти (cd ~ — домой)</td></tr>
+      <tr><td><code>cat файл</code> / <code>head файл</code></td><td>Показать файл / его начало</td></tr>
+      <tr><td><code>chmod +x</code> / <code>chmod +r</code></td><td>Право на запуск / чтение</td></tr>
+      <tr><td><code>mkdir</code> / <code>mv</code> / <code>rm</code></td><td>Создать / переименовать / удалить</td></tr>
+      <tr><td><code>echo "т" &gt;&gt; файл</code></td><td>Дописать строку в конец</td></tr>
+      <tr><td><code>ps aux | grep имя</code></td><td>Найти процесс</td></tr>
+      <tr><td><code>kill PID</code> / <code>kill -9 PID</code></td><td>Остановить (вежливо / жёстко)</td></tr>
+      <tr><td><code>find п -type f ! -name "*.key" -delete</code></td><td>Удалить всё, кроме .key</td></tr>
+    </table>
+
+    <h3>Git</h3>
+    <table class="t"><tr><th>Команда</th><th>Что делает</th></tr>
+      <tr><td><code>git clone адрес</code></td><td>Скачать репозиторий</td></tr>
+      <tr><td><code>git checkout -b develop</code></td><td>Создать ветку и перейти</td></tr>
+      <tr><td><code>git branch</code> / <code>git status</code></td><td>Ветки / что изменено</td></tr>
+      <tr><td><code>git add .</code></td><td>Добавить всё</td></tr>
+      <tr><td><code>git commit -m "текст"</code></td><td>Зафиксировать</td></tr>
+      <tr><td><code>git push origin develop</code></td><td>Отправить в GitLab</td></tr>
+    </table>
+
+    <h3>GCC и тесты (день 2)</h3>
+    <table class="t"><tr><th>Команда</th><th>Что делает</th></tr>
+      <tr><td><code>gcc -Wall -Werror -Wextra -std=c11 src/имя.c -o имя</code></td><td>Скомпилировать</td></tr>
+      <tr><td><code>... -o имя -lm</code></td><td>+ математика, -lm строго в конце</td></tr>
+      <tr><td><code>echo "ввод" | ./имя</code></td><td>Запустить с вводом</td></tr>
+      <tr><td><code>rm имя</code></td><td>Удалить бинарник</td></tr>
+    </table>
+  </article>
+
+  <div class="empty" id="empty">Ничего не найдено. Попробуй другой запрос.</div>
+  <footer>Шпаргалка-мануал к D01T01 и D02T02 · Удачи на проверке!</footer>
+</main>
+
+<div class="dock">
+  <div class="pill"><span id="pct">0%</span><span class="bar"><i id="bar"></i></span></div>
+  <button id="reset">Сбросить</button>
+  <button id="up">Наверх ↑</button>
+</div>
+
+<script>
+(function(){
+  var KEY = "evil-cheatsheet-v2";
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e){ state = {}; }
+
+  var boxes = Array.prototype.slice.call(document.querySelectorAll("li input[type=checkbox]"));
+  boxes.forEach(function(box, i){
+    var art = box.closest("article");
+    var id = (art && art.id ? art.id : "a") + "-s" + i;
+    box.dataset.sid = id;
+    box.checked = !!state[id];
+    if(box.checked) box.closest("li").classList.add("done");
+    box.addEventListener("change", function(){
+      state[id] = box.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){}
+      box.closest("li").classList.toggle("done", box.checked);
+      update();
+    });
+  });
+
+  function update(){
+    var total = 0, done = 0;
+    document.querySelectorAll("article").forEach(function(art){
+      var bs = art.querySelectorAll("li input[type=checkbox]");
+      if(!bs.length) return;
+      var d = 0;
+      bs.forEach(function(b){ total++; if(b.checked){ done++; d++; } });
+      var c = art.querySelector(".counter");
+      if(c){ c.textContent = d + "/" + bs.length; c.classList.toggle("done", d === bs.length); }
+    });
+    var p = total ? Math.round(done/total*100) : 0;
+    document.getElementById("pct").textContent = p + "% · " + done + "/" + total;
+    document.getElementById("bar").style.width = p + "%";
+  }
+
+  document.getElementById("reset").addEventListener("click", function(){
+    if(!confirm("Снять все галочки?")) return;
+    state = {};
+    try { localStorage.removeItem(KEY); } catch(e){}
+    boxes.forEach(function(b){ b.checked = false; b.closest("li").classList.remove("done"); });
+    update();
+  });
+
+  function flash(btn){
+    var t = btn.textContent;
+    btn.textContent = "✓"; btn.classList.add("ok");
+    setTimeout(function(){ btn.textContent = t; btn.classList.remove("ok"); }, 1200);
+  }
+  function copyText(text, btn){
+    function done(){ flash(btn); }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done, function(){ fallback(); });
+    } else { fallback(); }
+    function fallback(){
+      var ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch(e){}
+      document.body.removeChild(ta); done();
+    }
+  }
+  document.querySelectorAll(".copy-btn").forEach(function(btn){
+    btn.addEventListener("click", function(ev){
+      ev.stopPropagation();
+      var code = null;
+      var block = btn.closest(".codeblock");
+      if(block) code = block.querySelector("code");
+      else { var ic = btn.closest(".icmd"); if(ic) code = ic.querySelector("code"); }
+      if(code) copyText(code.textContent, btn);
+    });
+  });
+
+  var search = document.getElementById("search");
+  var day = "all";
+  document.querySelectorAll(".tabs button").forEach(function(b){
+    b.addEventListener("click", function(){
+      document.querySelectorAll(".tabs button").forEach(function(x){ x.classList.remove("on"); });
+      b.classList.add("on");
+      day = b.dataset.day;
+      applyFilters();
+    });
+  });
+  search.addEventListener("input", applyFilters);
+  function applyFilters(){
+    var q = search.value.trim().toLowerCase();
+    var visible = 0;
+    document.querySelectorAll("main article").forEach(function(art){
+      var okDay = (day === "all") || (art.dataset.day === "all") || (art.dataset.day === day);
+      var okQ = !q || art.textContent.toLowerCase().indexOf(q) !== -1;
+      var show = okDay && okQ;
+      if(art.id === "toc" && (q || day !== "all")) show = false;
+      art.classList.toggle("hidden", !show);
+      if(show) visible++;
+    });
+    document.getElementById("empty").style.display = visible ? "none" : "block";
+  }
+
+  document.getElementById("up").addEventListener("click", function(){
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+
+  update();
+})();
+</script>
+</body>
+</html>
